@@ -1,0 +1,72 @@
+//Zum neuen Projekt erstellen, in WSL in VisualStudio eingeben
+mkdir SimpleStorage
+cd SimpleStorage
+code .
+forge init
+
+//Im Ordnern script , test und src Dateien löschen
+//Im Ordner src neue Datei SimleStorage.sol erstellen und code einfügen aus GitHub.
+
+//lokale chain Starten
+anvil
+// danach in Metamask lokale Netzwerk einrichten für Localhost(Anvil), und Import Account mit Private Key von Anvil.
+
+//Contract in Anvil deployen
+forge create SimpleStorage --interactive
+0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80 //Anvil private key
+
+//Contract mit script in Anvil deployen
+//Deploy mit script DeploySimpleStorage.s.sol zuerst Anvil starten.
+forge script script/DeploySimpleStorage.s.sol --rpc-url http://127.0.0.1:8545 --broadcast --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+
+//private key speichern verschlüsselt password ist password
+cast wallet import deployer --interactive
+
+forge script script/DeploySimpleStorage.s.sol --rpc-url http://127.0.0.1:8545 --broadcast --account deployer
+
+
+//mit .env File arbeiten
+source .env
+echo $PRIVATE_KEY
+
+forge script script/DeploySimpleStorage.s.sol --rpc-url $RPC_URL --broadcast --private-key $PRIVATE_KEY
+
+//Zur Sicherheit nie offen PrivateKey schreiben, eine lösung in 22 Never Use a .env File
+
+//Interact with a smartcontract using the CLI 
+cast --help
+cast send --help
+
+//cast send mit contact Adresse, daten an Contract senden
+cast send 0x5fbdb2315678afecb367f032d93f642f64180aa3 "store(uint256)" 2026 --rpc-url $RPC_URL --private-key $PRIVATE_KEY
+
+cast send 0x5fbdb2315678afecb367f032d93f642f64180aa3 "addPerson(string,uint256)" "Alice" 42 --rpc-url $RPC_URL --private-key $PRIVATE_KEY
+
+
+//cast call contract lesen [TO] [SIG] [ARGS] , daten von Contract lesen
+cast call 0x5fbdb2315678afecb367f032d93f642f64180aa3 "retrieve()"
+cast call 0x5fbdb2315678afecb367f032d93f642f64180aa3 "nameToFavoriteNumber(string)(uint256)" "Alice" --rpc-url $RPC_URL
+cast call 0x5fbdb2315678afecb367f032d93f642f64180aa3 "listOfPeople(uint256)(uint256,string)" 0 --rpc-url $RPC_URL
+
+//deploy auf Sepolia Testnet
+// in Alchemy create new App testnet Sepolia endpoint machen daraus den Endpoint URL kopieren in .env
+//den PrivateKey as Metamask Sepolia Wallet nehmen
+source .env
+forge script script/DeploySimpleStorage.s.sol --rpc-url $SEPOLIA_RPC_URL --private-key $SEPOLIA_PRIVATE_KEY --broadcast
+
+
+
+
+
+//HEX Zahl in DEC umwandeln
+cast --to-base 0xff dec
+
+
+
+
+cyfrin FoundryFundamentals
+23
+
+
+
+

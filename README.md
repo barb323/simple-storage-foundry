@@ -1,0 +1,67 @@
+# SimpleStorage 
+A beginner-friendly Solidity smart contract built as part of the **Cyfrin Updraft** course.  
+This project demonstrates basic Solidity concepts and how to deploy and interact with contracts using **Foundry**.
+
+# To create a new project, run this in WSL / Visual Studio Code
+mkdir SimpleStorage
+cd SimpleStorage
+code .
+forge init
+
+# Delete the files in the script, test, and src folders
+# In the src folder, create a new file SimpleStorage.sol
+# and paste the contract code from GitHub.
+
+# Start local blockchain
+anvil
+
+# Then configure MetaMask with the local network (Localhost / Anvil)
+# and import an account using a private key from Anvil.
+
+# Deploy contract to Anvil
+forge create SimpleStorage --interactive
+0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80 // Anvil private key
+
+# Deploy contract to Anvil using a script
+# Start Anvil before running the DeploySimpleStorage.s.sol script.
+forge script script/DeploySimpleStorage.s.sol --rpc-url http://127.0.0.1:8545
+ --broadcast --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80
+
+# Store the private key encrypted (password: password)
+cast wallet import deployer --interactive
+
+forge script script/DeploySimpleStorage.s.sol --rpc-url http://127.0.0.1:8545
+ --broadcast --account deployer
+
+# Work with a .env file
+source .env
+echo $PRIVATE_KEY
+
+forge script script/DeploySimpleStorage.s.sol --rpc-url $RPC_URL --broadcast --private-key $PRIVATE_KEY
+
+# For security reasons, never expose private keys directly.
+# A safer solution is described in "22 Never Use a .env File".
+
+# Interact with a smart contract using the CLI
+cast --help
+cast send --help
+
+# Use cast send with the contract address to send data to the contract
+cast send 0x5fbdb2315678afecb367f032d93f642f64180aa3 "store(uint256)" 2026 --rpc-url $RPC_URL --private-key $PRIVATE_KEY
+
+cast send 0x5fbdb2315678afecb367f032d93f642f64180aa3 "addPerson(string,uint256)" "Alice" 42 --rpc-url $RPC_URL --private-key $PRIVATE_KEY
+
+# Use cast call to read data from the contract [TO] [SIG] [ARGS]
+cast call 0x5fbdb2315678afecb367f032d93f642f64180aa3 "retrieve()"
+cast call 0x5fbdb2315678afecb367f032d93f642f64180aa3 "nameToFavoriteNumber(string)(uint256)" "Alice" --rpc-url $RPC_URL
+cast call 0x5fbdb2315678afecb367f032d93f642f64180aa3 "listOfPeople(uint256)(uint256,string)" 0 --rpc-url $RPC_URL
+
+# Deploy to the Sepolia testnet
+# Create a new Sepolia testnet app in Alchemy
+# Copy the RPC endpoint URL into the .env file
+# Use the private key from your MetaMask Sepolia wallet
+source .env
+forge script script/DeploySimpleStorage.s.sol --rpc-url $SEPOLIA_RPC_URL --private-key $SEPOLIA_PRIVATE_KEY --broadcast
+
+# Convert HEX to DEC
+cast --to-base 0xff dec
