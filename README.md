@@ -2,6 +2,12 @@
 A beginner-friendly Solidity smart contract built as part of the **Cyfrin Updraft** course.  
 This project demonstrates basic Solidity concepts and how to deploy and interact with contracts using **Foundry**.
 
+# clone projekt In Visual Studio
+git clone https://github.com/barb323/simple-storage-foundry
+cd simple-storage-foundry
+forge install
+# New start Visual Studio
+
 # To create a new project, run this in WSL / Visual Studio Code
 mkdir SimpleStorage
 cd SimpleStorage
